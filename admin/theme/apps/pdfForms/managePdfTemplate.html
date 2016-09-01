@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <title>Manage Template</title>
+    </head>
+    <body>
+        <form id="pdfForm" action="." method="POST">
+            <button type="submit" class="btn btn-success">Save</button>
+            <a href="?download" class="btn btn-success">Download</a>
+
+            <div id="pdf-container">
+
+            </div>
+        </form>
+        <script>
+            $(function () {
+                // init form
+                $('#pdfForm').forms();
+
+                // manage checkboxes
+                $('body').on('change', '#pdf-container [type=checkbox]', function (e) {
+                    var box = $(this);
+                    var checked = box.is(':checked');
+                    var off_box = $('#off_' + box.attr('id'));
+
+                    if (checked) {
+                        off_box.prop('disabled', true);
+                    } else {
+                        off_box.prop('disabled', false);
+                    }
+                });
+
+                // Load and parse data
+                $.getJSON(window.location.pathname + '?asJson', function (data) {
+                    var pdfContainer = $('#pdf-container');
+
+                    // Process images
+                    for (var i in data.metadata.pages) {
+                        var page = data.metadata.pages[i];
+                        $('head').append('<style>' + page.style + '</style>');
+
+                        var pageContainer
+                                = $('<div class="row" id="page-' + i + '">'
+                                        + '    <div class="col-md-12 img-container" style="width:' + page.mediaBox.width + 'pt; height:' + page.mediaBox.height + 'pt;">'
+                                        + '    </div>'
+                                        + '</div>');
+
+                        var img = '<img src="/_hashes/files/' + page.hash + '" width="' + page.mediaBox.width + 'pt" height"' + page.mediaBox.height + 'pt"/>';
+
+                        pageContainer.find('.img-container').append(img);
+
+                        pdfContainer.append(pageContainer);
+                    }
+
+                    // process form fields
+                    for (var i in data.metadata.fields) {
+                        var field = data.metadata.fields[i];
+                        var pageIndex = field.pageIndex;
+                        var page = $('#page-' + pageIndex);
+
+                        $('head').append('<style>' + field.style + '</style>');
+
+                        page.find('.img-container').append(field.html);
+
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

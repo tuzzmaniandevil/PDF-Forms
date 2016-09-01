@@ -1,0 +1,14 @@
+<controllers>
+    <!-- Common JS Files -->
+    <source>/APP-INF/common/config.js</source>
+    <source>/APP-INF/common/common.js</source>
+    <source>/APP-INF/common/formatterUtils.js</source>
+
+    <!-- Admin Controllers -->
+    <source>/APP-INF/admin/managePdfTemplates.js</source>
+    <source>/APP-INF/admin/managePdfTemplate.js</source>
+
+    <!-- Admin menu items -->
+    <menu parentId="menuContent" id="managePdfForms" text="PDF Forms" path="/pdfForms/" ordering="12" type="admin"/>
+
+</controllers>
