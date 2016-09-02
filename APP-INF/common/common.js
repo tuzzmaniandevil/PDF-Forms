@@ -84,10 +84,6 @@
                     p.mediaBox = {
                         width: page.mediaBox.width,
                         height: page.mediaBox.height,
-                        lowerLeftY: page.mediaBox.lowerLeftY,
-                        lowerLeftX: page.mediaBox.lowerLeftX,
-                        upperRightX: page.mediaBox.upperRightX,
-                        upperRightY: page.mediaBox.upperRightY
                     };
                 }
 
@@ -120,6 +116,14 @@
 
                 if (f.fieldType == "CheckBox") {
                     f.onValue = field.onValue;
+                } else if (f.fieldType == 'RadioButton') {
+                    f.exportValues = [];
+                    var exportValues = field.exportValues;
+
+                    for (var i in exportValues) {
+                        var v = exportValues[i];
+                        f.exportValues.push(v);
+                    }
                 }
 
                 var mainWidget = null;
@@ -136,32 +140,11 @@
                         pageIndex: pages.indexOf(widget.page),
                         width: widget.rectangle.width,
                         height: widget.rectangle.height,
-                        lowerLeftY: widget.rectangle.lowerLeftY,
-                        lowerLeftX: widget.rectangle.lowerLeftX,
-                        upperRightX: widget.rectangle.upperRightX,
-                        upperRightY: widget.rectangle.upperRightY,
                         subType: widget.subtype,
                         highlightingMode: widget.highlightingMode,
                         contents: widget.contents,
                         annotationName: widget.annotationName
                     };
-
-                    if (isNotNull(widget.appearanceCharacteristics)) {
-                        wd.appearance = {};
-                        wd.appearance.rotation = widget.appearanceCharacteristics.rotation;
-                        if (widget.appearanceCharacteristics.borderColor) {
-                            wd.appearance.borderColor = widget.appearanceCharacteristics.borderColor.components;
-                        }
-                        if (widget.appearanceCharacteristics.background) {
-                            wd.appearance.backgroundColor = widget.appearanceCharacteristics.background.components;
-                        }
-                        if (widget.appearanceCharacteristics.color) {
-                            wd.appearance.color = widget.appearanceCharacteristics.color.components;
-                        }
-                        wd.appearance.normalCaption = widget.appearanceCharacteristics.normalCaption;
-                        wd.appearance.rolloverCaption = widget.appearanceCharacteristics.rolloverCaption;
-                        wd.appearance.alternateCaption = widget.appearanceCharacteristics.alternateCaption;
-                    }
 
                     f.widgets.push(wd);
                 }
